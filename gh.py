@@ -19,8 +19,17 @@ def analyze_repos():
         topics = repo.get_topics()
         if topics != []:
             if "python" in topics:
+                # here we would have all of our team tagged repos but just using 'python' for now
                 python_repos.append(repo.full_name)
-    print("You have " + str(len(python_repos)) + " repo(s) using Python")
+                # check if it has a PR?
+                pulls = repo.get_pulls(
+                    state='open')
+                for pr in pulls:
+                    # Print out message and PR url
+                    print("Your repository " + repo.full_name +
+                          ' has an open PR here: ' + pr.html_url)
+
+    print('Done')
 
 
 analyze_repos()
