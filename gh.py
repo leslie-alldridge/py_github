@@ -12,10 +12,10 @@ python_repos = []
 
 
 def analyze_repos():
+    print('Checking repositories, please wait a moment...')
     repositories = github.search_repositories(
         query='language:python user:leslie-alldridge')
     for repo in repositories:
-        print(repo)
         topics = repo.get_topics()
         if topics != []:
             if "python" in topics:
