@@ -5,27 +5,22 @@ from env import token
 github = Github(token)
 
 # Globals
-name = []
-react_repos = []
+python_repos = []
 
 # Get all repos and analyze their tags
+# add repos tagged with python to an array and print it
 
 
 def analyze_repos():
-    for repo in github.get_user().get_repos():
-        # add repo names to an array
-        if "kakapo-2018" not in repo.full_name:
-            name.append(repo.full_name)
-        print(name)
+    repositories = github.search_repositories(
+        query='language:python user:leslie-alldridge')
+    for repo in repositories:
+        print(repo)
+        topics = repo.get_topics()
+        if topics != []:
+            if "python" in topics:
+                python_repos.append(repo.full_name)
+    print("You have " + str(len(python_repos)) + " repo(s) using Python")
 
-        for item in name:
-            repo = github.get_repo(item)
-            topics = repo.get_topics()
-            if "react" in topics:
-                react_repos.append(item)
-
-
-print(react_repos)
-print("You have " + str(len(react_repos)) + " repos using React")
 
 analyze_repos()
