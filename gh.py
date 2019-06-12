@@ -4,36 +4,27 @@ from env import token
 # First create a Github instance:
 github = Github(token)
 
-# Globals
-python_repos = []
-
-# Get all repos and analyze their tags
-# add repos tagged with python to an array and print it
-##
-
 
 def analyze_repos(user):
-    print('Checking repositories, please wait a moment...')
+    print('Finding repository please wait a moment...')
     # Get repo
     repo = github.get_repo(
         'leslie-alldridge/yaml_config')
-    # List all contents
-    contents = repo.get_contents("")
-    # Get item with path="team.yml"
-    yaml_repo = ""
-    for content in contents:
-        if content.name == 'team.yml':
-            yaml_repo = content
-        else:
-            print('not team yaml')
-    print(yaml_repo)
+    # grab the yaml file
+    contents = repo.get_contents("team.yml", ref="test")
+    yaml_repo = contents
+
     # See if email address exists, and if so, remove it
     if user in str(yaml_repo.decoded_content):
+        # decode byte string
         user_array = tidy_content(yaml_repo.decoded_content.decode("utf-8"))
+        # remove user from list
         new_array = remove_user(user_array, user)
-        print(new_array)
-    repo.update_file(yaml_repo.path, "more tests",
-                     "more tests", yaml_repo.sha, branch="test")
+        # convert list back to string
+        final_msg = list_to_string(new_array)
+        # update github with the new changes
+        repo.update_file(yaml_repo.path, "Removed user",
+                         final_msg, contents.sha, branch="test")
     print('Done')
 
 
@@ -55,5 +46,15 @@ def remove_user(users, email):
     return users
 
 
-user = 'leslie.alldridge@gmail.com'
+def list_to_string(arr):
+    string_final = ''
+    for item in arr:
+        string_final += ('name: ' + item['name'] + '\n' + 'email: ' +
+                         item['email'] + '\n' + 'role: ' + item['role'] + '\n')
+        if len(item) > 3:
+            string_final += ('description: ' + item['description'] + '\n')
+    return string_final
+
+
+user = 'leslie.alldridge2@gmail.com'
 analyze_repos(user)
