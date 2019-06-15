@@ -14,18 +14,21 @@ def analyze_repos(user):
     yaml_folder = repo.get_contents("teams")
     # run over each file
     for file in yaml_folder:
+        file = repo.get_contents(file.path)
+        print('*** Reading file: ')
+        print(file)
 
         # See if email address exists, and if so, remove it
-    if user in str(yaml_repo.decoded_content):
+    if user in str(file.decoded_content):
         # decode byte string
-        user_array = tidy_content(yaml_repo.decoded_content.decode("utf-8"))
+        user_array = tidy_content(file.decoded_content.decode("utf-8"))
         # remove user from list
         new_array = remove_user(user_array, user)
         # convert list back to string
         final_msg = list_to_string(new_array)
         # update github with the new changes
-        repo.update_file(yaml_repo.path, "Removed user",
-                         final_msg, contents.sha, branch="test")
+        repo.update_file(file.path, "Removed user",
+                         final_msg, yaml_folder.sha, branch="test")
         repo.create_pull(
             base='master', head='leslie-alldridge:test', title='test', body='test')
     print('Done')
