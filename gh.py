@@ -10,11 +10,12 @@ def analyze_repos(user):
     # Get repo
     repo = github.get_repo(
         'leslie-alldridge/yaml_config')
-    # grab the yaml file
-    contents = repo.get_contents("team.yml", ref="test")
-    yaml_repo = contents
+    # grab the yaml folder
+    yaml_folder = repo.get_contents("teams")
+    # run over each file
+    for file in yaml_folder:
 
-    # See if email address exists, and if so, remove it
+        # See if email address exists, and if so, remove it
     if user in str(yaml_repo.decoded_content):
         # decode byte string
         user_array = tidy_content(yaml_repo.decoded_content.decode("utf-8"))
@@ -30,6 +31,9 @@ def analyze_repos(user):
     print('Done')
 
 
+# from yaml organised string to list of dictionaries
+
+
 def tidy_content(content_as_string):
     tidy = content_as_string.splitlines()
     output = []
@@ -40,12 +44,16 @@ def tidy_content(content_as_string):
         output[-1][key] = value
     return output
 
+# remove user from yaml file
+
 
 def remove_user(users, email):
     for user in users:
         if user['email'] == email:
             users.remove(user)
     return users
+
+# list of dictionaries back to a yaml organized string
 
 
 def list_to_string(arr):
