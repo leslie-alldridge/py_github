@@ -14,7 +14,6 @@ def analyze_repos(user):
     yaml_folder = repo.get_contents("teams")
     # run over each file
     for file in yaml_folder:
-        print(file.sha)
         file = repo.get_contents(file.path)
         # See if email address exists, and if so, remove it
         if user in str(file.decoded_content):
