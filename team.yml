@@ -1,0 +1,30 @@
+---
+name: Test Team
+schedules:
+- Primary
+escalation_description: Escalation Policy
+services:
+- name: Default
+  service_description:
+integrations:
+members:
+- name: leslie1
+  email: leslie1@xero.com
+  role: user
+- name: leslie2
+  email: leslie2@xero.com
+  role: user
+- name: leslie3
+  email: leslie3@xero.com
+  job_title: Title
+  role: user
+- name: leslie4
+  email: leslie4@xero.com
+  role: user
+- name: leslie5
+  email: leslie5@xero.com
+  job_title: Title
+  role: user
+- name: leslie6
+  email: leslie6@xero.com
+  role: user
